@@ -26,15 +26,9 @@
             </div>
         </div>
         <nav id="nav-menu" class="nav-links">
-            <div class="nav-link-wrapper"><a href="/">Inicio</a></div>
-            <div class="nav-link-wrapper"><a href="/informacion">Más información</a></div>
-            <div class="nav-link-wrapper"><a href="/quienessomos">Quienes Somos</a></div>
-            @auth
-                 <div class="nav-link-wrapper"><a href="{{ route('dashboard') }}">Mi Dashboard</a></div>
-                 <div class="nav-link-wrapper"><a href="/logout">Cerrar Sesión</a></div>
-            @else
-                 <div class="nav-link-wrapper"><a href="/login">Iniciar Sesión</a></div>
-            @endauth
+        <div class="nav-link-wrapper"><a href="{{ route('dashboard') }}">Mi Dashboard</a></div>
+        <div class="nav-link-wrapper"><a href="/logout">Cerrar Sesión</a></div>
+
         </nav>
     </header>
 

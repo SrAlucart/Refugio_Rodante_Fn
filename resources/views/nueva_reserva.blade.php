@@ -18,8 +18,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="espacios_disponibles" class="form-label">Espacio</label>
-            <select id="espacios_disponibles" name="espacios_disponibles" class="form-control" required>
+            <label for="espacio_id" class="form-label">Espacio</label>
+            <select id="espacio_id" name="espacio_id" class="form-control" required>
                 <option value="">Seleccione un parqueadero primero</option>
             </select>
         </div>
@@ -51,7 +51,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('parqueadero_id').addEventListener('change', function() {
             const parqueaderoId = this.value;
-            const espacioSelect = document.getElementById('espacios_disponibles');
+            const espacioSelect = document.getElementById('espacio_id');
             
             espacioSelect.innerHTML = '<option value="">Cargando espacios...</option>';
 
