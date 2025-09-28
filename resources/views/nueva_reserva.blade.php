@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+{{-- Esta es la sección para el contenido principal de la página --}}
 @section('content')
 <div class="container mt-5">
     <h3>Nueva Reserva</h3>
@@ -17,9 +18,9 @@
         </div>
 
         <div class="mb-3">
-            <label for="espacio_id" class="form-label">Espacio</label>
-            <select id="espacio_id" name="espacio_id" class="form-control" required>
-                <!-- Espacios cargados dinámicamente vía JS -->
+            <label for="espacios_disponibles" class="form-label">Espacio</label>
+            <select id="espacios_disponibles" name="espacios_disponibles" class="form-control" required>
+                <option value="">Seleccione un parqueadero primero</option>
             </select>
         </div>
 
@@ -42,4 +43,49 @@
         <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+@endsection
+
+{{-- Esta es la sección para los scripts de JavaScript --}}
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('parqueadero_id').addEventListener('change', function() {
+            const parqueaderoId = this.value;
+            const espacioSelect = document.getElementById('espacios_disponibles');
+            
+            espacioSelect.innerHTML = '<option value="">Cargando espacios...</option>';
+
+            if (!parqueaderoId) {
+                espacioSelect.innerHTML = '<option value="">Seleccione un parqueadero primero</option>';
+                return;
+            }
+
+            // Petición fetch para obtener los espacios del parqueadero seleccionado
+            fetch(/parqueaderos/${parqueaderoId}/espacios)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    espacioSelect.innerHTML = '<option value="">Seleccione un espacio</option>';
+                    if (data.length > 0) {
+                        data.forEach(espacio => {
+                            const option = document.createElement('option');
+                            option.value = espacio.id;
+                            option.textContent = Espacio ${espacio.numero} (${espacio.tipo || 'Estándar'});
+                            espacioSelect.appendChild(option);
+                        });
+                    } else {
+                        espacioSelect.innerHTML = '<option value="">No hay espacios disponibles</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar los espacios:', error);
+                    espacioSelect.innerHTML = '<option value="">Error al cargar los espacios</option>';
+                });
+        });
+    });
+</script>
 @endsection

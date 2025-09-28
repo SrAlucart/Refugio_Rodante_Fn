@@ -14,7 +14,7 @@ class ReservaController extends Controller
     public function create()
     {
         $parqueaderos = Parqueadero::with('espacios')->get();
-        return view('reservas.nueva', compact('parqueaderos'));
+        return view('nueva_reserva', compact('parqueaderos'));
     }
 
     // Guardar reserva
@@ -39,5 +39,19 @@ class ReservaController extends Controller
 
         return redirect()->route('dashboard')
             ->with('success', '¡Reserva creada exitosamente!');
+    }
+    /**
+ * Obtener espacios de un parqueadero específico para AJAX.
+ */
+    public function getEspacios($parqueadero_id)
+        {
+    // Busca solo los espacios que no estén en una reserva activa o pendiente
+    $espacios = EspacioParqueadero::where('parqueadero_id', $parqueadero_id)
+        ->whereDoesntHave('reservas', function ($query) {
+            $query->whereIn('estado', ['confirmada', 'pendiente']);
+        })
+        ->get();
+
+    return response()->json($espacios);
     }
 }

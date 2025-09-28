@@ -52,9 +52,11 @@ Route::middleware(['auth'])->group(function () {
 | RUTAS DE RESERVA (Usuario con rol usuario)
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth', 'rol:usuario'])->group(function () {
-    Route::get('/usuario/reserva/nueva', [ReservaController::class, 'formulario'])->name('nueva_reserva');
+    Route::get('/usuario/reserva/nueva', [ReservaController::class, 'create'])->name('nueva_reserva');
     Route::post('/usuario/reserva', [ReservaController::class, 'guardar'])->name('guardar_reserva');
+    Route::get('/parqueaderos/{id}/espacios', [ReservaController::class, 'getEspacios'])->name('parqueaderos.espacios');
 });
 
 /*
