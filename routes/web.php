@@ -13,7 +13,7 @@ use App\Http\Controllers\UsuarioController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/inde');
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

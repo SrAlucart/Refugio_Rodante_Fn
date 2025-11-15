@@ -1,5 +1,5 @@
 <?php
-$conexion = new mysqli("127.0.0.1", "root", "", "rodante", 3307);
+$conexion = new mysqli("127.0.0.1", "root", "", "rodante", env('DB_PORT', '3306'));
 
 
 if ($conexion->connect_error) {
