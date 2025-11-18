@@ -14,4 +14,9 @@ class EspacioParqueadero extends Model
     {
         return $this->belongsTo(Parqueadero::class, 'parqueadero_id');
     }
+
+    public function reservas()
+{
+    return $this->hasMany(Reserva::class, 'espacio_id');
+}
 }

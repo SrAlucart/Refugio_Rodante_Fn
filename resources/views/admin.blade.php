@@ -64,9 +64,10 @@
                                 <h5>Acciones de Administrador</h5>
 <a href="{{ route('parqueaderos.index') }}" class="btn btn-primary mb-2">Gestionar Parqueaderos</a><br>
 
-                                <a href="#" class="btn btn-success mb-2">Gestionar Usuarios</a><br>
+                                <a href="{{ route('usuarios.index') }}" class="btn btn-success mb-2">
+    Gestionar Usuarios
+</a>
                                 <a href="#" class="btn btn-info mb-2">Ver Todas las Reservas</a><br>
-                                <a href="#" class="btn btn-warning mb-2">Reportes</a>
                             </div>
                         </div>
 

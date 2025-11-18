@@ -41,6 +41,23 @@ Route::get('/reservas/{id}/finalizar', [ReservaController::class, 'finalizar'])
 
 Route::resource('parqueaderos', ParqueaderoController::class);
 
+// Gestión de usuarios (solo admin)
+Route::middleware(['auth', 'rol:admin'])->group(function () {
+
+    Route::get('/admin/usuarios', [UsuarioController::class, 'index'])
+        ->name('usuarios.index');
+
+    Route::post('/admin/usuarios', [UsuarioController::class, 'store'])
+        ->name('usuarios.store');
+
+    Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])
+        ->name('usuarios.update');
+
+    Route::delete('/admin/usuarios/{id}', [UsuarioController::class, 'destroy'])
+        ->name('usuarios.destroy');
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | RUTAS USUARIO AUTENTICADO

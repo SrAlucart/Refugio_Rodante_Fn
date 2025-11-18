@@ -106,31 +106,32 @@ public function store(Request $request)
     {
         //
     }
+public function update(Request $request, $id)
+{
+    $parqueadero = Parqueadero::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:100',
+        'direccion' => 'nullable|string|max:255',
+        'descripcion' => 'nullable|string',
+        'espacios_disponibles' => 'required|integer|min:0',
+        'latitud' => 'required|numeric',
+        'longitud' => 'required|numeric',
+        'filas' => 'required|integer|min:1',
+        'puestos_por_fila' => 'required|integer|min:1',
+        'letra_inicio' => 'required|string|max:1',
+    ]);
 
-    
+    $parqueadero->update($validated);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    return back()->with('success', 'Parqueadero actualizado correctamente.');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+public function destroy($id)
+{
+    Parqueadero::destroy($id);
+    return back()->with('success', 'Parqueadero eliminado.');
+}
+
 }
 
