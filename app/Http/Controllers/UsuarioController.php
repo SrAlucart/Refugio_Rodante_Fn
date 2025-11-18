@@ -8,6 +8,7 @@ use App\Models\EspacioParqueadero;
 use App\Models\Parqueadero;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
@@ -84,5 +85,66 @@ public function Usuario()
         $espacio->parqueadero->decrement('espacios_disponibles');
 
         return redirect()->route('usuario.dashboard')->with('success', 'Reserva realizada con éxito');
+    }
+
+      public function index()
+    {
+        $usuarios = Usuario::all();
+
+        return view('admin.gestion-usuarios', compact('usuarios'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required|string|min:3|max:50',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|min:6',
+            'rol' => 'required|in:usuario,admin',
+        ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+
+        $usuario = Usuario::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario creado correctamente',
+            'usuario' => $usuario
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+
+        $validated = $request->validate([
+            'username' => 'required|string|min:3|max:50',
+            'email' => "required|email|unique:usuarios,email,$id",
+            'rol' => 'required|in:usuario,admin',
+        ]);
+
+        // Cambiar contraseña si viene en el request
+        if ($request->password) {
+            $validated['password'] = Hash::make($request->password);
+        }
+
+        $usuario->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario actualizado correctamente',
+            'usuario' => $usuario
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        Usuario::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Usuario eliminado correctamente'
+        ]);
     }
 }

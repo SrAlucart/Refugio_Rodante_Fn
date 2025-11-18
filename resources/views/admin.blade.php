@@ -64,9 +64,10 @@
                                 <h5>Acciones de Administrador</h5>
 <a href="{{ route('parqueaderos.index') }}" class="btn btn-primary mb-2">Gestionar Parqueaderos</a><br>
 
-                                <a href="#" class="btn btn-success mb-2">Gestionar Usuarios</a><br>
+                                <a href="{{ route('usuarios.index') }}" class="btn btn-success mb-2">
+    Gestionar Usuarios
+</a>
                                 <a href="#" class="btn btn-info mb-2">Ver Todas las Reservas</a><br>
-                                <a href="#" class="btn btn-warning mb-2">Reportes</a>
                             </div>
                         </div>
 
@@ -134,10 +135,29 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td colspan="7" class="text-center">No hay reservas pendientes</td>
-                                            </tr>
-                                        </tbody>
+    @forelse ($reservasPendientes as $reserva)
+        <tr>
+            <td>{{ $reserva->usuario->username }}</td>
+            <td>{{ $reserva->espacio->parqueadero->nombre }}</td>
+            <td>{{ $reserva->espacio->numero }}</td>
+            <td>{{ $reserva->fecha_inicio }}</td>
+            <td>{{ $reserva->fecha_fin }}</td>
+            <td>{{ $reserva->placa_vehiculo }}</td>
+            <td>
+                <a href="{{ route('reservas.aprobar', $reserva->id) }}"
+                   class="btn btn-success btn-sm">Aprobar</a>
+
+                <a href="{{ route('reservas.cancelar', $reserva->id) }}"
+                   class="btn btn-danger btn-sm">Cancelar</a>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="7" class="text-center">No hay reservas pendientes</td>
+        </tr>
+    @endforelse
+</tbody>
+
                                     </table>
                                 </div>
                             </div>

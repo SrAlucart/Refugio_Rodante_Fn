@@ -35,7 +35,28 @@ Route::middleware(['auth'])->group(function () {
 | RUTAS ADMIN - RECURSOS (Admin)
 |--------------------------------------------------------------------------
 */
+Route::get('/reservas/{id}/finalizar', [ReservaController::class, 'finalizar'])
+    ->name('reservas.finalizar')
+    ->middleware(['auth', 'rol:admin']);
+
 Route::resource('parqueaderos', ParqueaderoController::class);
+
+// Gestión de usuarios (solo admin)
+Route::middleware(['auth', 'rol:admin'])->group(function () {
+
+    Route::get('/admin/usuarios', [UsuarioController::class, 'index'])
+        ->name('usuarios.index');
+
+    Route::post('/admin/usuarios', [UsuarioController::class, 'store'])
+        ->name('usuarios.store');
+
+    Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])
+        ->name('usuarios.update');
+
+    Route::delete('/admin/usuarios/{id}', [UsuarioController::class, 'destroy'])
+        ->name('usuarios.destroy');
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,18 +73,28 @@ Route::middleware(['auth'])->group(function () {
 | RUTAS DE RESERVA (Usuario con rol usuario)
 |--------------------------------------------------------------------------
 */
-
 Route::middleware(['auth', 'rol:usuario'])->group(function () {
     Route::get('/usuario/reserva/nueva', [ReservaController::class, 'create'])->name('nueva_reserva');
-    Route::post('/usuario/reserva', [ReservaController::class, 'guardar'])->name('guardar_reserva');
-    Route::get('/parqueaderos/{id}/espacios', [ReservaController::class, 'getEspacios'])->name('parqueaderos.espacios');
+    Route::post('/usuario/reserva', [ReservaController::class, 'store'])->name('guardar_reserva');
+    Route::middleware(['auth', 'rol:usuario'])->group(function () {
+    Route::get('/usuario/reserva/{id}/cancelar', [ReservaController::class, 'cancelarUsuario'])
+        ->name('usuario.reserva.cancelar');
+
+    Route::get('/usuario/reserva/{id}/finalizar', [ReservaController::class, 'finalizarUsuario'])
+        ->name('usuario.reserva.finalizar');
 });
 
+
+});
 /*
 |--------------------------------------------------------------------------
 | RUTAS PÚBLICAS (Frontend general)
 |--------------------------------------------------------------------------
 */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/parqueaderos/{id}/espacios', [ReservaController::class, 'espaciosPorParqueadero'])
+        ->name('parqueaderos.espacios');
+});
 Route::view('/inde', 'inde');
 Route::view('/informacion', 'informacion');
 Route::view('/quienessomos', 'quienessomos');
@@ -80,3 +111,11 @@ Route::view('/espacioamerica', 'espacioamerica');
 Route::view('/mapa', 'mapa');
 Route::get('/mapa-parqueaderos', [ParkingController::class, 'showMap']);
 Route::view('/reservaamerica', 'reservaamerica');
+
+
+// Rutas para aprobar y cancelar reservas
+Route::get('/admin/reservas/{id}/aprobar', [ReservaController::class, 'aprobar'])
+    ->name('reservas.aprobar');
+
+Route::get('/admin/reservas/{id}/cancelar', [ReservaController::class, 'cancelar'])
+    ->name('reservas.cancelar');

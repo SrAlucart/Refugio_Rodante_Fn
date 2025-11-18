@@ -37,24 +37,20 @@
 
 
 <body>
-    <header>
+   <header>
         <div class="logo-container">
             <div class="left-side">
-                <a href=""><img src="img/refugiorodante2.png" alt="Logo"></a>
+                <a href="/"><img src="{{ asset('img/refugiorodante2.png') }}" alt="Logo"></a>
             </div>
             <div class="right-side">
                 <h1>REFUGIO RODANTE</h1>
             </div>
-
-            <!-- Botón de menú hamburguesa -->
             <div class="menu-toggle" id="menu-toggle">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
             </div>
         </div>
-
-        <!-- Enlaces de navegación -->
         <nav id="nav-menu" class="nav-links">
             <div class="nav-link-wrapper"><a href="/inde">Inicio</a></div>
             <div class="nav-link-wrapper"><a href="/informacion">Más información</a></div>
