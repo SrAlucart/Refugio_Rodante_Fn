@@ -53,6 +53,30 @@
                     <label for="descripcion" class="form-label">Descripción</label>
                     <textarea name="descripcion" class="form-control" rows="1"></textarea>
                 </div>
+                <div class="col-md-3">
+                    <label for="latitud" class="form-label">Latitud</label>
+                    <input type="text" name="latitud" class="form-control" placeholder="Ej: 6.2442" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="longitud" class="form-label">Longitud</label>
+                    <input type="text" name="longitud" class="form-control" placeholder="Ej: -75.5812" required>
+                </div>
+
+                <div class="col-md-3">
+    <label for="filas" class="form-label">Filas (letras)</label>
+    <input type="number" name="filas" class="form-control" min="1" value="1" required>
+</div>
+
+<div class="col-md-3">
+    <label for="puestos_por_fila" class="form-label">Puestos por fila (números)</label>
+    <input type="number" name="puestos_por_fila" class="form-control" min="1" value="1" required>
+</div>
+
+<div class="col-md-3">
+    <label for="letra_inicio" class="form-label">Letra inicio</label>
+    <input type="text" name="letra_inicio" class="form-control" maxlength="1" value="A" required>
+</div>
             </div>
             <div class="text-end mt-3">
                 <button type="submit" class="btn btn-success">Guardar Parqueadero</button>

@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\Models\Reserva;
+use App\Models\Usuario;
+use App\Models\Parqueadero;
+use App\Models\EspacioParqueadero;
 
 
 class AuthController extends Controller
@@ -122,7 +126,7 @@ class AuthController extends Controller
     /**
      * Dashboard administrador
      */
-   public function dashboardAdmin()
+public function dashboardAdmin()
 {
     if (!Auth::check() || Auth::user()->rol !== 'admin') {
         return redirect('/login')->with('error', 'Acceso no autorizado.');
@@ -130,6 +134,7 @@ class AuthController extends Controller
 
     $usuario = Auth::user();
 
+    // ESTADÍSTICAS
     $estadisticas = [
         'total_usuarios' => DB::table('usuarios')->count(),
         'total_parqueaderos' => DB::table('parqueaderos')->count(),
@@ -138,8 +143,18 @@ class AuthController extends Controller
         'reservas_pendientes' => DB::table('reservas')->where('estado', 'pendiente')->count()
     ];
 
-    return view('admin', compact('usuario', 'estadisticas'));
+    // RESERVAS PENDIENTES REALES
+    $reservasPendientes = Reserva::with(['usuario', 'parqueadero', 'espacio'])
+        ->where('estado', 'pendiente')
+        ->get();
+
+    return view('admin', compact(
+        'usuario',
+        'estadisticas',
+        'reservasPendientes'
+    ));
 }
+
     /**
      * Obtener usuario desde la sesión
      */

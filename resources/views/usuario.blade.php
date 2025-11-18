@@ -61,7 +61,8 @@
                             <div class="col-md-6">
                                 <h5>Acciones Rápidas</h5>
 
-<a href="{{ route('nueva_reserva') }}" class="btn btn-warning mb-2">Hacer Nueva Reserva</a>
+<a href="/mapa-parqueaderos" class="btn btn-warning mb-2">Hacer Nueva Reserva</a>
+
 
 
                             </div>
@@ -71,34 +72,53 @@
                             <div class="col-md-12">
                                 <h5>Mis Reservas Recientes</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Parqueadero</th>
-                                                <th>Espacio</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Fecha Fin</th>
-                                                <th>Estado</th>
-                                                <th>Placa</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($reservas as $reserva)
-                                            <tr>
-                                                <td>{{ $reserva->nombre_parqueadero ?? 'N/A' }}</td>
-                                                <td>{{ $reserva->numero_espacio ?? 'N/A' }}</td>
-                                                <td>{{ $reserva->fecha_inicio }}</td>
-                                                <td>{{ $reserva->fecha_fin }}</td>
-                                                <td>{{ ucfirst($reserva->estado) }}</td>
-                                                <td>{{ $reserva->placa_vehiculo }}</td>
-                                            </tr>
-                                            @empty
-                                            <tr>
-                                                <td colspan="6" class="text-center">No tienes reservas actualmente</td>
-                                            </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                   <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Parqueadero</th>
+            <th>Espacio</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Placa</th>
+            <th>Acciones</th> <!-- 🔥 NUEVA COLUMNA -->
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($reservas as $reserva)
+        <tr>
+            <td>{{ $reserva->nombre_parqueadero ?? 'N/A' }}</td>
+            <td>{{ $reserva->numero_espacio ?? 'N/A' }}</td>
+            <td>{{ $reserva->fecha_inicio }}</td>
+            <td>{{ $reserva->fecha_fin }}</td>
+            <td>{{ ucfirst($reserva->estado) }}</td>
+            <td>{{ $reserva->placa_vehiculo }}</td>
+
+            <!-- 🔥 BOTONES NUEVOS -->
+            <td>
+                @if($reserva->estado == 'confirmada' || $reserva->estado == 'pendiente')
+                    <a href="{{ route('usuario.reserva.cancelar', $reserva->id) }}"
+                       class="btn btn-danger btn-sm">
+                        Cancelar
+                    </a>
+                @endif
+
+                @if($reserva->estado == 'confirmada')
+                    <a href="{{ route('usuario.reserva.finalizar', $reserva->id) }}"
+                       class="btn btn-secondary btn-sm mt-1">
+                        Finalizar
+                    </a>
+                @endif
+            </td>
+
+        </tr>
+        @empty
+        <tr>
+            <td colspan="7" class="text-center">No tienes reservas actualmente</td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
                                 </div>
                             </div>
                         </div>
